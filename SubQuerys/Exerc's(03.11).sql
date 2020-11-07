@@ -1,0 +1,333 @@
+--------------------------------------------------- 01.xml -------------------------------------------------------
+CREATE DATABASE FATEC
+GO
+USE [FATEC]
+
+
+CREATE TABLE [ALUNO](
+[RA] INT NOT NULL,
+[NOME] VARCHAR(100) NOT NULL,
+[SOBRENOME] VARCHAR(100) NOT NULL,
+[RUA] VARCHAR(250) NOT NULL,
+[NUMERO] INT NOT NULL,
+[BAIRRO] VARCHAR(50) NOT NULL,
+[CEP] INT NOT NULL,
+[TELEFONE] INT
+)
+
+
+CREATE TABLE [CURSO](
+[CODIGO] INT NOT NULL,
+[NOME] VARCHAR(100) NOT NULL,
+[CARGA HORARIA] INT NOT NULL,
+[TURNO] VARCHAR(50) NOT NULL
+)
+
+
+CREATE TABLE [DISCIPLINAS](
+[CODIGO] INT NOT NULL,
+[NOME] VARCHAR(100) NOT NULL,
+[CARGA HORARIA] INT NOT NULL,
+[TURNO] VARCHAR(50) NOT NULL,
+[SEMESTRE] INT NOT NULL
+)
+
+
+INSERT INTO [ALUNO]
+VALUES
+(12345, 'José', 'Silva', 'Almirante Noronha', 236, 'Jardim São Paulo', 1589000, 69875287),
+(12346, 'Ana', 'Maria Bastos', 'Anhaia', 1568, 'Barra Funda', 3569000, 25698526),
+(12347, 'Mario', 'Santos', 'XV de Novembro',	1841, 'Centro',	1020030, NULL),
+(12348, 'Marcia', 'Neves', 'Voluntários da Patria', 225, 'Santana', 2785090, 78964152)
+
+
+INSERT INTO [CURSO]
+VALUES
+(1, 'Informática', 2800, 'Tarde'),
+(2, 'Informática', 2800, 'Noite'),
+(3, 'Logística', 2650, 'Tarde'),
+(4, 'Logística', 2650, 'Noite'),
+(5, 'Plásticos', 2500, 'Tarde'),
+(6, 'Plásticos', 2500, 'Noite')
+
+
+INSERT INTO [DISCIPLINAS]
+VALUES
+(1, 'Informática', 4, 'Tarde', 1),
+(2, 'Informática', 4, 'Noite', 1),
+(3, 'Quimica', 4, 'Tarde', 1),
+(4, 'Quimica', 4, 'Noite', 1),
+(5, 'Banco de Dados I', 2, 'Tarde', 3),
+(6, 'Banco de Dados I', 2, 'Noite', 3),
+(7, 'Estrutura de Dados', 4, 'Tarde', 4),
+(8, 'Estrutura de Dados', 4, 'Noite', 4)
+
+
+SELECT [NOME] + ' ' + [SOBRENOME] AS [NOME COMPLETO]
+FROM [ALUNO]
+
+
+SELECT [RUA] + ', ' + CONVERT(VARCHAR(5), [NUMERO]) + ' - ' + [BAIRRO] + ' - ' + CONVERT(VARCHAR(8), [CEP]) AS [LOGRADOURO]
+FROM [ALUNO]
+WHERE [RA] = 12347
+
+
+SELECT [TELEFONE]
+FROM [ALUNO]
+WHERE [RA] = 12348
+
+
+SELECT [SEMESTRE]
+FROM [DISCIPLINAS]
+WHERE [TURNO] = 'Noite'
+
+
+--------------------------------------------------- 02.xml ------------------------------------------------
+CREATE DATABASE MECANICA
+GO
+USE [MECANICA]
+
+
+CREATE TABLE [CARRO](
+[PLACA] VARCHAR(50) NOT NULL,
+[MARCA] VARCHAR(50) NOT NULL,
+[MODELO] VARCHAR(50) NOT NULL,
+[COR] VARCHAR(50) NOT NULL,
+[ANO] INT NOT NULL
+PRIMARY KEY([PLACA])
+)
+
+
+CREATE TABLE [CLIENTE](
+[NOME] VARCHAR(100) NOT NULL,
+[LOGRADOURO] VARCHAR(100) NOT NULL,
+[NUMERO] INT NOT NULL,
+[BAIRRO] VARCHAR(50) NOT NULL,
+[TELEFONE] VARCHAR(11) NOT NULL,
+[CARRO] VARCHAR(50) NOT NULL
+PRIMARY KEY([CARRO])
+FOREIGN KEY ([CARRO]) REFERENCES [CARRO]([PLACA])
+)
+
+
+CREATE TABLE [PEÇAS](
+[CODIGO] INT NOT NULL,
+[NOME] VARCHAR(50) NOT NULL,
+[VALOR] DECIMAL(7,2) NOT NULL
+PRIMARY KEY([CODIGO])
+)
+
+
+CREATE TABLE [SERVIÇO](
+[CARRO] VARCHAR(50) NOT NULL,
+[PEÇA] INT NOT NULL,
+[QUANTIDADE] INT NOT NULL,
+[VALOR] DECIMAL(7,2) NOT NULL,
+[DATA] DATE NOT NULL
+PRIMARY KEY([CARRO], [PEÇA], [DATA])
+FOREIGN KEY ([CARRO]) REFERENCES [CARRO]([PLACA]),
+FOREIGN KEY ([PEÇA]) REFERENCES [PEÇAS]([CODIGO])
+)
+
+
+INSERT INTO [CLIENTE]
+VALUES
+('João Alves', 'R. Pereira Barreto', 1258, 'Jd. Oliveiras', '2154-9658', 'DXO9876'),
+('Ana Maria', 'R. 7 de Setembro', 259, 'Centro', '9658-8541', 'LKM7380'),
+('Clara Oliveira', 'Av. Nações Unidas', 10254, 'Pinheiros', '2458-9658', 'EGT4631'),
+('José Simões', 'R. XV de Novembro', 36, 'Água Branca', '7895-2459', 'BCD7521'),
+('Paula Rocha', 'R. Anhaia', 548, 'Barra Funda', '6958-2548', 'AFT9087')
+
+
+INSERT INTO [CARRO]
+VALUES
+('AFT9087', 'VW', 'Gol', 'Preto', 2007),
+('DXO9876', 'Ford', 'Ka', 'Azul', 2000),
+('EGT4631', 'Renault', 'Clio', 'Verde', 2004),
+('LKM7380', 'Fiat', 'Palio', 'Prata', 1997),
+('BCD7521', 'Ford', 'Fiesta', 'Preto', 1999)
+
+
+INSERT INTO [PEÇAS]
+VALUES
+(1, 'Vela', 70),
+(2, 'Correia Dentada', 125),
+(3, 'Trambulador', 90),
+(4, 'Filtro de Ar', 30)
+
+
+INSERT INTO [SERVIÇO]
+VALUES
+('DXO9876', 1, 4, 280, '2020-08-01'),
+('DXO9876', 4, 1, 30, '2020-08-01'),
+('EGT4631', 3, 1, 90, '2020-08-02'),
+('DXO9876', 2, 1, 125, '2020-08-07')
+
+
+SELECT [TELEFONE]
+FROM [dbo].[CLIENTE]
+WHERE [CARRO] IN
+(SELECT [PLACA]
+FROM [dbo].[CARRO]
+WHERE [MODELO] = 'Ka' AND [COR] = 'Azul'
+)
+
+
+SELECT [LOGRADOURO] + ', ' + CONVERT(VARCHAR(10), [NUMERO]) + ' - ' + [BAIRRO] AS [ENDEREÇO COMPLETO]
+FROM [dbo].[CLIENTE]
+WHERE [CARRO] IN
+(SELECT [CARRO]
+FROM [dbo].[SERVIÇO]
+WHERE [DATA] = '2020-08-02'
+)
+
+
+SELECT [PLACA]
+FROM [dbo].[CARRO]
+WHERE [ANO] < 2005
+
+
+SELECT [MARCA] + ' - '+ [MODELO] + ' - '+ [COR] AS [DESCRIÇÃO]
+FROM [dbo].[CARRO]
+WHERE [ANO] > 2005
+
+
+SELECT [CODIGO], [NOME]
+FROM [dbo].[PEÇAS]
+WHERE [VALOR] < 80.0
+
+
+--------------------------------------------------- 03.xml ------------------------------------------------
+CREATE DATABASE CLINICA
+GO
+USE [CLINICA]
+
+
+CREATE TABLE [PACIENTE](
+[CPF] VARCHAR(11) NOT NULL,
+[NOME] VARCHAR(100) NOT NULL,
+[RUA] VARCHAR(100) NOT NULL,
+[NUMERO] INT NOT NULL,
+[BAIRRO] VARCHAR(50) NOT NULL,
+[TELEFONE] VARCHAR(11)
+PRIMARY KEY([CPF])
+)
+
+
+CREATE TABLE [MEDICO](
+[CODIGO] INT NOT NULL,
+[NOME] VARCHAR(100) NOT NULL,
+[ESPECIALIDADE] VARCHAR(50) NOT NULL
+PRIMARY KEY([CODIGO])
+)
+
+
+CREATE TABLE [PRONTUARIO](
+[DATA] DATE NOT NULL,
+[CPF PACIENTE] VARCHAR(11) NOT NULL,
+[CODIGO MEDICO] INT NOT NULL,
+[DIAGNOSTICO] VARCHAR(250) NOT NULL,
+[MEDICAMENTO] VARCHAR(100) NOT NULL
+PRIMARY KEY([DATA], [CPF PACIENTE], [CODIGO MEDICO])
+FOREIGN KEY ([CPF PACIENTE]) REFERENCES [PACIENTE]([CPF]),
+FOREIGN KEY ([CODIGO MEDICO]) REFERENCES [MEDICO]([CODIGO])
+)
+
+
+INSERT INTO [PACIENTE]
+VALUES
+(35454562890, 'José Rubens', 'Campos Salles', 2750, 'Centro', 21450998),
+(29865439810, 'Ana Claudia', 'Sete de Setembro', 178, 'Centro', 97382764),
+(82176534800, 'Marcos Aurélio', 'Timóteo Penteado', 236, 'Vila Galvão', 68172651),
+(12386758770, 'Maria Rita', 'Castello Branco', 7765, 'Vila Rosália', NULL),
+(92173458910, 'Joana de Souza', 'XV de Novembro', 298, 'Centro', 21276578)
+
+
+INSERT INTO [MEDICO]
+VALUES
+(1, 'Wilson Cesar', 'Pediatra'),
+(2, 'Marcia Matos', 'Geriatra'),
+(3, 'Carolina Oliveira', 'Ortopedista'),
+(4, 'Vinicius Araujo', 'Clínico Geral')
+
+
+INSERT INTO [PRONTUARIO]
+VALUES
+('2020-09-10', '35454562890', 2, 'Reumatismo', 'Celebra'),
+('2020-09-10', '92173458910', 2, 'Renite Alérgica', 'Allegra'),
+('2020-09-12', '29865439810', 1, 'Inflamação de garganta', 'Nimesulida'),
+('2020-09-13', '35454562890', 2, 'H1N1', 'Tamiflu'),
+('2020-09-15', '82176534800', 4, 'Gripe', 'Resprin'),
+('2020-09-15', '12386758770', 3, 'Braço Quebrado', 'Dorflex + Gesso')
+
+
+SELECT [NOME] + ' - ' + [RUA] + ' - ' + CONVERT(VARCHAR(10), [NUMERO]) + ' - ' + [BAIRRO] AS [DADOS]
+FROM [dbo].[PACIENTE]
+WHERE [CPF] IN
+(SELECT [CPF PACIENTE]
+FROM [dbo].[PRONTUARIO]
+WHERE [CODIGO MEDICO] IN
+(SELECT [CODIGO]
+FROM [dbo].[MEDICO]
+WHERE [ESPECIALIDADE] = 'Geriatra'))
+
+
+SELECT [ESPECIALIDADE]
+FROM [dbo].[MEDICO]
+WHERE [NOME] = 'Carolina Oliveira'
+
+
+SELECT [MEDICAMENTO]
+FROM [dbo].[PRONTUARIO]
+WHERE [DIAGNOSTICO] = 'Reumatismo'
+
+
+SELECT [DIAGNOSTICO], [MEDICAMENTO]
+FROM [dbo].[PRONTUARIO]
+WHERE [CPF PACIENTE] IN
+(SELECT [CPF]
+FROM [dbo].[PACIENTE]
+WHERE [NOME] = 'José Rubens'
+)
+
+
+SELECT [NOME],
+	CASE WHEN (LEN([ESPECIALIDADE]) > 3) 
+		THEN
+			SUBSTRING([ESPECIALIDADE], 1, 3) + '.'
+	END AS [ESPECIALIDADE]
+FROM [dbo].[MEDICO]
+WHERE [CODIGO] IN
+(SELECT [CODIGO MEDICO]
+FROM [dbo].[PRONTUARIO]
+WHERE [CPF PACIENTE] IN
+(SELECT [CPF]
+FROM [dbo].[PACIENTE]
+WHERE [NOME] = 'José Rubens'
+))
+
+
+SELECT (SUBSTRING([CPF], 1, 3) + '.' + SUBSTRING([CPF], 4, 3) + '.' + SUBSTRING([CPF], 7, 3) + '-' + SUBSTRING([CPF], 10, 2)) AS [CPF],
+[NOME], ([RUA] + ', ' + CONVERT(VARCHAR(10), [NUMERO]) + ' - ' + [BAIRRO]) AS [ENDEREÇO COMPLETO], 
+	CASE WHEN ([TELEFONE] IS NULL)
+		THEN
+			'(-)'
+	END AS [TELEFONE]
+FROM [dbo].[PACIENTE]
+WHERE [CPF] IN
+(SELECT [CPF PACIENTE]
+FROM [dbo].[PRONTUARIO]
+WHERE [CODIGO MEDICO] IN
+(SELECT [CODIGO]
+FROM [dbo].[MEDICO]
+WHERE [NOME] = 'Vinicius Araujo'
+))
+
+
+SELECT DATEDIFF(DAY, [DATA], GETDATE())
+FROM [dbo].[PRONTUARIO]
+WHERE [CPF PACIENTE] IN
+(SELECT [CPF]
+FROM [dbo].[PACIENTE]
+WHERE [NOME] = 'Maria Rita'
+)
