@@ -32,7 +32,7 @@
 				<input type="submit" value="Mostrar">
 			</div>
 		</form>
-		<form action="pesquisaJogos">
+		<form action="pesquisaJogos" method="post">
 			<div>
 				<label>Pesquise jogos por data</label>
 			</div>

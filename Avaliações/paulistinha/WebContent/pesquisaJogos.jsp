@@ -10,5 +10,6 @@
 </head>
 <body>
 	<%//Logica para mostrar os jogos pesquisados %>
+	<a href="index.jsp">Pagina pricipal</a>
 </body>
 </html>
